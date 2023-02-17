@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Document</title>
+        <style>
+            *{margin: 0;padding: 0;list-style: none;}
+            h1{
+               text-align: center;
+               font-weight: bold;
+               margin-top: 200px;
+               margin-bottom: 20px;
+            }
+            Ul{
+                width: 600px;
+                margin: 0 auto;
+            }
+            li{
+                text-align: center;
+                background-color: #eee;
+                font-weight: bold;
+                font-size: 20px;
+                padding: 20px 0;
+                margin-bottom: 10px;
+            }
+            .point{
+                margin-top: 100px;
+                display: none;
+                text-align: center;
+                font-size: 40px;
+                font-weight: bold;
+            }
+            
+        </style>
+    
+    </head>
+    <body>
+
+        <h1></h1>
+        <ul></ul>
+        <div class="point">あなたにおすすめのコーヒーは<span data-point-num></span>です</div>
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script>
+        $(function(){
+            
+            let count = 0;
+            let point = 0;
+            const list = [
+                {
+                  'title':'どんな時にコーヒーを飲むことが多いですか？',
+                  'answer':[
+                    '朝',
+                    '仕事中',
+                    '15時のおやつ時',
+                    '就寝前'
+                  ]
+                },
+                {
+                  'title':'コーヒーと一緒にどんなお菓子を食べたいですか？',
+                  'answer':[
+                    'フルーツの入ったケーキ',
+                    'チョコレート',
+                    'メイプルクッキー',
+                    '糖質OFFのダイエット菓子'
+                  ]
+                },
+                {
+                  'title':'次のコーヒーの表現で美味しそうに感じるのはどれですか？',
+                  'answer':[
+                    '華やかな香りと酸味',
+                    '酸味と苦味のバランスが良い',
+                    'どんな時でも飲みやすくスッキリしている',
+                    '口当たりがまろやかで甘みが強い'
+                  ]
+                }
+            ];
+
+            function render( count ){
+              $('li').remove();
+              $('h1').text(list[count]['title']);
+              list[count]['answer'].forEach(function( text ){
+                const li = `<li>${text}</li>`;
+                $('ul').append(li);
+              });
+            }
+            render(0);
+
+            function point_get( li_index ){
+                switch (li_index){
+                    case 0:
+                        return 2;
+                        break;
+                    case 1:
+                        return 1;
+                        break;
+                    case 2:
+                        return 0;
+                        break;
+                    case 3:
+                        return -1;
+                        break;
+                }
+            }
+
+            function point_text( point ){
+                let text = 'GUATEMALA Francisco Perez';
+                if( point > 4){
+                    text = 'ETHIOPIA YIRGACHEFFE Beloya'
+                }
+                if( point  == 4 || point == 3){
+                    text = 'KENYA GATOMBOYA'
+                }
+                if( point  < -1 ){
+                    text = 'COSTARICA DON MAYO'
+                }
+                return text;
+
+            }
+
+            
+            
+        
+
+            $('body').on('click', 'li' ,function(){
+              const li_index = $('li').index(this);
+              point += point_get(li_index);
+              if( count < list.length-1 ){
+                count++;
+                render(count);
+              }else{
+                $('[data-point-num]').text(point_text(point));
+                $('ul,h1').hide();
+                $('.point').fadeIn();
+                console.log('end');
+              }
+                
+            });
+
+        });
+    </script>
+    </body>
+</html>
